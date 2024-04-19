@@ -50,10 +50,8 @@ static const char *virtual_filter_get_name(void *unused)
 	return obs_module_text("VirtualCam");
 }
 
-static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
-				 void *data);
-static bool virtual_filter_stop(obs_properties_t *props, obs_property_t *p,
-				void *data);
+static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p, void *data);
+static bool virtual_filter_stop(obs_properties_t *props, obs_property_t *p, void *data);
 
 static void frontend_event(enum obs_frontend_event event, void *data)
 {
@@ -293,6 +291,10 @@ static obs_properties_t *virtual_filter_properties(void *data)
 	obs_property_list_add_int(cb, "OBS-Camera2", ModeVideo2);
 	obs_property_list_add_int(cb, "OBS-Camera3", ModeVideo3);
 	obs_property_list_add_int(cb, "OBS-Camera4", ModeVideo4);
+	obs_property_list_add_int(cb, "OBS-Camera5", ModeVideo5);
+	obs_property_list_add_int(cb, "OBS-Camera6", ModeVideo6);
+	obs_property_list_add_int(cb, "OBS-Camera7", ModeVideo7);
+	obs_property_list_add_int(cb, "OBS-Camera8", ModeVideo8);
 
 	obs_properties_add_bool(props, S_FLIP, T_FLIP);
 	obs_properties_add_bool(props, S_RATIO, T_RATIO);

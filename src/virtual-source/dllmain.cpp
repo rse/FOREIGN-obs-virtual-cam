@@ -12,7 +12,7 @@ STDAPI AMovieSetupRegisterServer(CLSID clsServer, LPCWSTR szDescription,
 				 LPCWSTR szServerType = L"InprocServer32");
 STDAPI AMovieSetupUnregisterServer(CLSID clsServer);
 
-#define NUM_VIDEO_FILTERS 4
+#define NUM_VIDEO_FILTERS 8
 
 // {27B05C2D-93DC-474A-A5DA-9BBA34CB2A9C}
 DEFINE_GUID(CLSID_OBS_VirtualV, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
@@ -26,6 +26,18 @@ DEFINE_GUID(CLSID_OBS_VirtualV3, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
 
 DEFINE_GUID(CLSID_OBS_VirtualV4, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
 	    0xba, 0x34, 0xcb, 0x2a, 0x9f);
+
+DEFINE_GUID(CLSID_OBS_VirtualV5, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
+	    0xba, 0x34, 0xcb, 0x2a, 0xa0);
+
+DEFINE_GUID(CLSID_OBS_VirtualV6, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
+	    0xba, 0x34, 0xcb, 0x2a, 0xa1);
+
+DEFINE_GUID(CLSID_OBS_VirtualV7, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
+	    0xba, 0x34, 0xcb, 0x2a, 0xa2);
+
+DEFINE_GUID(CLSID_OBS_VirtualV8, 0x27b05c2d, 0x93dc, 0x474a, 0xa5, 0xda, 0x9b,
+	    0xba, 0x34, 0xcb, 0x2a, 0xa3);
 
 // {B750E5CD-5E7E-4ED3-B675-A5003C439997}
 DEFINE_GUID(CLSID_OBS_VirtualA, 0xb750e5cd, 0x5e7e, 0x4ed3, 0xb6, 0x75, 0xa5,
@@ -60,6 +72,22 @@ const AMOVIESETUP_FILTER AMSFilterV4 = {&CLSID_OBS_VirtualV4,
 					L"OBS Virtual Cam4", MERIT_DO_NOT_USE,
 					1, &AMSPinV};
 
+const AMOVIESETUP_FILTER AMSFilterV5 = {&CLSID_OBS_VirtualV5,
+					L"OBS Virtual Cam5", MERIT_DO_NOT_USE,
+					1, &AMSPinV};
+
+const AMOVIESETUP_FILTER AMSFilterV6 = {&CLSID_OBS_VirtualV6,
+					L"OBS Virtual Cam6", MERIT_DO_NOT_USE,
+					1, &AMSPinV};
+
+const AMOVIESETUP_FILTER AMSFilterV7 = {&CLSID_OBS_VirtualV7,
+					L"OBS Virtual Cam7", MERIT_DO_NOT_USE,
+					1, &AMSPinV};
+
+const AMOVIESETUP_FILTER AMSFilterV8 = {&CLSID_OBS_VirtualV8,
+					L"OBS Virtual Cam8", MERIT_DO_NOT_USE,
+					1, &AMSPinV};
+
 const AMOVIESETUP_FILTER AMSFilterA = {&CLSID_OBS_VirtualA,
 				       L"OBS Virtual Audio", MERIT_DO_NOT_USE,
 				       1, &AMSPinA};
@@ -72,6 +100,14 @@ CFactoryTemplate g_Templates[NUM_VIDEO_FILTERS + 1] = {
 	 &AMSFilterV3},
 	{L"OBS-Camera4", &CLSID_OBS_VirtualV4, CreateInstance4, NULL,
 	 &AMSFilterV4},
+	{L"OBS-Camera5", &CLSID_OBS_VirtualV5, CreateInstance5, NULL,
+	 &AMSFilterV5},
+	{L"OBS-Camera6", &CLSID_OBS_VirtualV6, CreateInstance6, NULL,
+	 &AMSFilterV6},
+	{L"OBS-Camera7", &CLSID_OBS_VirtualV7, CreateInstance7, NULL,
+	 &AMSFilterV7},
+	{L"OBS-Camera8", &CLSID_OBS_VirtualV8, CreateInstance8, NULL,
+	 &AMSFilterV8},
 	{L"OBS-Audio", &CLSID_OBS_VirtualA, CVAudio::CreateInstance, NULL,
 	 &AMSFilterA}};
 
@@ -173,6 +209,14 @@ STDAPI DllInstall(BOOL bInstall, _In_opt_ LPCWSTR pszCmdLine)
 		return RegisterFilters(TRUE, 2);
 	else if (lstrcmpW(pszCmdLine, L"3") == 0)
 		return RegisterFilters(TRUE, 3);
+	else if (lstrcmpW(pszCmdLine, L"4") == 0)
+		return RegisterFilters(TRUE, 4);
+	else if (lstrcmpW(pszCmdLine, L"5") == 0)
+		return RegisterFilters(TRUE, 5);
+	else if (lstrcmpW(pszCmdLine, L"6") == 0)
+		return RegisterFilters(TRUE, 6);
+	else if (lstrcmpW(pszCmdLine, L"7") == 0)
+		return RegisterFilters(TRUE, 7);
 	else
 		return RegisterFilters(TRUE, NUM_VIDEO_FILTERS);
 }

@@ -42,6 +42,34 @@ CUnknown *WINAPI CreateInstance4(LPUNKNOWN lpunk, HRESULT *phr)
 	return punk;
 }
 
+CUnknown *WINAPI CreateInstance5(LPUNKNOWN lpunk, HRESULT *phr)
+{
+	ASSERT(phr);
+	CUnknown *punk = new CVCam(lpunk, phr, CLSID_OBS_VirtualV5, ModeVideo5);
+	return punk;
+}
+
+CUnknown *WINAPI CreateInstance6(LPUNKNOWN lpunk, HRESULT *phr)
+{
+	ASSERT(phr);
+	CUnknown *punk = new CVCam(lpunk, phr, CLSID_OBS_VirtualV6, ModeVideo6);
+	return punk;
+}
+
+CUnknown *WINAPI CreateInstance7(LPUNKNOWN lpunk, HRESULT *phr)
+{
+	ASSERT(phr);
+	CUnknown *punk = new CVCam(lpunk, phr, CLSID_OBS_VirtualV7, ModeVideo7);
+	return punk;
+}
+
+CUnknown *WINAPI CreateInstance8(LPUNKNOWN lpunk, HRESULT *phr)
+{
+	ASSERT(phr);
+	CUnknown *punk = new CVCam(lpunk, phr, CLSID_OBS_VirtualV8, ModeVideo8);
+	return punk;
+}
+
 CVCam::CVCam(LPUNKNOWN lpunk, HRESULT *phr, const GUID id, int mode)
 	: CSource(NAME("OBS Virtual CAM"), lpunk, id)
 {
@@ -242,10 +270,12 @@ bool CVCamStream::ListSupportFormat()
 	if (format_list.size() > 0)
 		format_list.clear();
 
+	format_list.push_back(struct format(3840, 2160, 333333));
 	format_list.push_back(struct format(1920, 1080, 333333));
 	format_list.push_back(struct format(1280, 720, 333333));
 	format_list.push_back(struct format(960, 540, 333333));
 	format_list.push_back(struct format(640, 360, 333333));
+	format_list.push_back(struct format(320, 180, 333333));
 
 	return true;
 }
