@@ -59,6 +59,11 @@ static void frontend_event(enum obs_frontend_event event, void *data)
 {
 	virtual_filter_data *filter = (virtual_filter_data *)data;
 	if (event == OBS_FRONTEND_EVENT_FINISHED_LOADING) {
+		/* in "studio mode" OBS seems to clone the active scene to bring it into program,
+		   so this filter might exist twice during startup. Avoid to start twice. */
+		obs_source_t *parent = obs_filter_get_parent(filter->context);
+		if (parent && obs_source_active(parent) && obs_frontend_preview_program_mode_active())
+			return;
 		if (filter && filter->autostart)
 			virtual_filter_start(nullptr, nullptr, data);
 		else
@@ -89,7 +94,6 @@ static void *virtual_filter_create(obs_data_t *settings, obs_source_t *context)
 	data->context = context;
 	data->texrender = gs_texrender_create(GS_BGRA, GS_ZS_NONE);
 	obs_source_update(context, settings);
-	UNUSED_PARAMETER(settings);
 	obs_frontend_add_event_callback(frontend_event, data);
 	return data;
 }
@@ -98,15 +102,17 @@ static void virtual_filter_video(void *param, float seconds)
 {
 	virtual_filter_data *filter = (virtual_filter_data *)param;
 	obs_source_t *target = obs_filter_get_target(filter->context);
+	if (!target || obs_source_removed(target))
+		return;
+	obs_source_t *parent = obs_filter_get_parent(filter->context);
+	if (!parent || obs_source_removed(parent))
+		return;
 	uint8_t *video_data;
 	uint32_t linesize;
 	uint32_t width = obs_source_get_width(target);
 	uint32_t height = obs_source_get_height(target);
 	uint64_t time = os_gettime_ns();
 	struct vec4 background;
-
-	if (!target)
-		return;
 
 	width = min(filter->base_width, width);
 	height = min(filter->base_height, height);
@@ -267,6 +273,8 @@ static bool virtual_filter_stop(obs_properties_t *props, obs_property_t *p,
 {
 	UNUSED_PARAMETER(p);
 	virtual_filter_data *filter = (virtual_filter_data *)data;
+	if (!filter->active)
+		return true;
 	obs_remove_tick_callback(virtual_filter_video, data);
 	shared_queue_write_close(&filter->video_queue);
 	if (props != nullptr) {
